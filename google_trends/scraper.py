@@ -1,10 +1,10 @@
-from typing import List, Dict, Any
+from typing import List, Dict
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 class GoogleTrendsScraper:
@@ -16,15 +16,13 @@ class GoogleTrendsScraper:
 
     def initialize(self):
         try:
-            chrome_options = Options()
+            chrome_options = webdriver.ChromeOptions()
             chrome_options.add_argument("--headless=new")
-            chrome_options.add_argument("--window-size=1920,1080")
-            chrome_options.add_argument("--no-sandbox")
-            chrome_options.add_argument("--disable-dev-shm-usage")
             
-            # Use system-installed ChromeDriver
-            service = Service('/usr/bin/chromedriver')
+            # Use ChromeDriverManager to handle driver installation
+            service = Service(ChromeDriverManager().install())
             self.driver = webdriver.Chrome(service=service, options=chrome_options)
+
         except Exception as error:
             print("Error initializing Google Trends scraper:", str(error))
             raise
